@@ -50,7 +50,21 @@ def search_for_artist(token, artist_name):
     
     return json_result
 
+### This function uses the artist search API to retrieve an artist based on a given artist ID, 
+### It then searches for the results using a get function and we filter out the json to only keep the tracks
+### which are then return to the user 
+def get_songs_by_artist(token, artist_id):
+    url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks?country=US"
+    headers = get_auth_header(token)
+    result = get(url, headers= headers)
+    json_results = json.loads(result.content)["tracks"]
+    return json_results
+
 
 token = get_token()
 result = search_for_artist(token, "ACDC")
+artist_id = result[0]["id"]
+songs = get_songs_by_artist(token, artist_id)
+print(songs)
+
 
